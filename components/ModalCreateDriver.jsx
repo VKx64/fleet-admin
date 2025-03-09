@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { Icon } from "@iconify/react";
-import { useAuth } from '../contexts/AuthContext'; // Assuming you have an auth context
-import useCreateDriver from '../hooks/useCreateDriver'; // Import the custom hook
+import { useAuth } from '../contexts/AuthContext';
+import useCreateDriver from '../hooks/useCreateDriver';
 
 const ModalCreateDriver = ({ isOpen, onClose }) => {
-  const { user } = useAuth(); // Get the logged-in user from the context
-  const adminId = user?.id;  // Extract the adminId (user's ID)
+  const { user } = useAuth();
+  const adminId = user?.id;
 
   // Use the custom hook to handle the logic for creating a driver
   const { createDriver, loading, error } = useCreateDriver(adminId);
@@ -15,14 +15,14 @@ const ModalCreateDriver = ({ isOpen, onClose }) => {
     email: '',
     phone: '',
     password: '',
-    avatar: null, // Add avatar file to the form data
+    avatar: null,
   });
 
   const handleChange = (e) => {
     const { name, value, files } = e.target;
     setFormData({
       ...formData,
-      [name]: files ? files[0] : value, // Handle file for avatar
+      [name]: files ? files[0] : value,
     });
   };
 

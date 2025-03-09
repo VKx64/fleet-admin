@@ -23,9 +23,9 @@ const useCreateDriver = (adminId) => {
       formDataToSubmit.append('email', formData.email);
       formDataToSubmit.append('phone', formData.phone);
       formDataToSubmit.append('password', formData.password);
-      formDataToSubmit.append('admin', adminId);  // Use the logged-in user's ID for the admin field
+      formDataToSubmit.append('admin', adminId);
       if (formData.avatar) {
-        formDataToSubmit.append('avatar', formData.avatar);  // Append the avatar file
+        formDataToSubmit.append('avatar', formData.avatar);
       }
 
       // Log FormData to inspect the contents
@@ -34,10 +34,10 @@ const useCreateDriver = (adminId) => {
       // Use PocketBase SDK to create a new driver record
       await pb.collection('drivers').create(formDataToSubmit);
 
-      return true;  // Return success
+      return true;
     } catch (err) {
       setError(err.message);
-      return false; // Return failure
+      return false;
     } finally {
       setLoading(false);
     }
