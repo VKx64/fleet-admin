@@ -2,13 +2,23 @@ import React, { useState } from "react";
 import { Icon } from "@iconify/react";
 import useFetchFleets from "@/hooks/useFetchFleets";
 import ModalCreateFleet from "@/components/ModalCreateFleet";
+import ModalFleetData from "@/components/ModalFleetData";
 
 const ListFleets = ({ driver }) => {
   const { fleets, loading, error } = useFetchFleets(driver);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isFleetDataModalOpen, setIsFleetDataModalOpen] = useState(false);
+  const [selectedFleet, setSelectedFleet] = useState(null);
 
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);
+
+  const openFleetDataModal = (fleet) => {
+    setSelectedFleet(fleet);
+    setIsFleetDataModalOpen(true);
+  };
+
+  const closeFleetDataModal = () => setIsFleetDataModalOpen(false);
 
   return (
     <div className="h-full w-full bg-blue-500 p-4 gap-2 flex flex-col">
@@ -41,7 +51,13 @@ const ListFleets = ({ driver }) => {
         {fleets.length === 0 ? (
           <p>No Fleets available</p>
         ) : (
-          fleets.map((fleet) => <Fleet key={fleet.id} fleet={fleet} />)
+          fleets.map((fleet) => (
+            <Fleet
+              key={fleet.id}
+              fleet={fleet}
+              onViewFleet={openFleetDataModal}
+            />
+          ))
         )}
       </div>
 
@@ -51,6 +67,15 @@ const ListFleets = ({ driver }) => {
         onClose={closeModal}
         driverId={driver.id}
       />
+
+      {/* Modal for Viewing Fleet Data */}
+      {selectedFleet && (
+        <ModalFleetData
+          isOpen={isFleetDataModalOpen}
+          onClose={closeFleetDataModal}
+          fleet={selectedFleet}
+        />
+      )}
     </div>
   );
 };
@@ -67,7 +92,7 @@ const Fleet = ({ fleet, onViewFleet }) => {
         alt="Fleet"
       />
       <h1 className="text-center text-2xl">{plate}</h1>
-      <button className="btn btn-soft" onClick={onViewFleet}>
+      <button className="btn btn-soft" onClick={() => onViewFleet(fleet)}>
         View Fleet
       </button>
     </div>

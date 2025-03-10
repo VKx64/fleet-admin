@@ -18,6 +18,7 @@ const useDrivers = () => {
         setLoading(true);
         const result = await pb.collection("drivers").getList(1, 100, {
           filter: `admin.id = "${loggedinUser.id}"`,
+          requestKey: null
         });
         setDrivers(result.items)
       } catch (error) {
