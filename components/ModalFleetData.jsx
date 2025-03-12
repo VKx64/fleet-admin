@@ -3,6 +3,8 @@ import FuelHistory from "./FuelHistory";
 import FuelStatistics from "./FuelStatistics";
 import FuelPrediction from "./FuelPrediction";
 import LocationMap from "./LocationMap";
+import FleetMaintenance from "./FleetMaintenance";
+import MaintenanceHistory from "./MaintenanceHistory";
 
 const ModalFleetData = ({ isOpen, onClose, fleet }) => {
   if (!isOpen) return null;
@@ -50,7 +52,8 @@ const ModalFleetData = ({ isOpen, onClose, fleet }) => {
           aria-label="Maintenance"
         />
         <div className="tab-content bg-base-100 border-base-300 p-6">
-          Tab content 3
+          <FleetMaintenance fleet={fleet} />
+          <MaintenanceHistory fleet={fleet} />
         </div>
 
         <input
@@ -64,12 +67,29 @@ const ModalFleetData = ({ isOpen, onClose, fleet }) => {
             <div className="mr-4">
               <fieldset className="fieldset w-xs bg-base-200 border border-base-300 p-4 rounded-box">
                 <label className="fieldset-label">ID</label>
-                <input type="email" className="input border-gray-300 disabled:border-gray-300" placeholder="Email" disabled defaultValue={"9176231065"}/>
+                <input
+                  type="email"
+                  className="input border-gray-300 disabled:border-gray-300"
+                  placeholder="Email"
+                  disabled
+                  defaultValue={"9176231065"}
+                />
 
                 <label className="fieldset-label">Password</label>
-                <input type="text" className="input border border-gray-300 disabled:border-gray-300" placeholder="Password" disabled defaultValue={"123456"}/>
+                <input
+                  type="text"
+                  className="input border border-gray-300 disabled:border-gray-300"
+                  placeholder="Password"
+                  disabled
+                  defaultValue={"123456"}
+                />
 
-                <a href="https://en.aika168.com" target="_blank" rel="noopener noreferrer" className="btn btn-neutral mt-4">
+                <a
+                  href="https://en.aika168.com"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="btn btn-neutral mt-4"
+                >
                   Truck Location
                 </a>
               </fieldset>
@@ -78,6 +98,16 @@ const ModalFleetData = ({ isOpen, onClose, fleet }) => {
               <LocationMap />
             </div>
           </div>
+        </div>
+
+        <input
+          type="radio"
+          name="my_tabs_6"
+          className="tab"
+          aria-label="Performance"
+        />
+        <div className="tab-content bg-base-100 border-base-300 p-6">
+          Performance
         </div>
       </div>
     </div>

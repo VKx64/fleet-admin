@@ -1,38 +1,39 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef } from 'react';
 import dynamic from 'next/dynamic';
 
-// Dynamically import the map components for SSR compatibility
-const MapWithNoSSR = dynamic(() => import('react-leaflet').then(mod => mod.MapContainer), { ssr: false });
-const TileLayer = dynamic(() => import('react-leaflet').then(mod => mod.TileLayer), { ssr: false });
-const Marker = dynamic(() => import('react-leaflet').then(mod => mod.Marker), { ssr: false });
-const Popup = dynamic(() => import('react-leaflet').then(mod => mod.Popup), { ssr: false });
+// Import OpenLayers modules
+import 'ol/ol.css';
+import { Map } from 'ol';
+import { View } from 'ol';
+import TileLayer from 'ol/layer/Tile';
+import OSM from 'ol/source/OSM';
+import { fromLonLat } from 'ol/proj';
+import { Overlay } from 'ol';
 
 const LocationMap = () => {
-  const position = [6.1157, 125.1795]; // Coordinates for STI College, General Santos City
-  const zoomLevel = 13; // Map zoom level
-
-  const [mapReady, setMapReady] = useState(false);
+  const mapElement = useRef(null); // Reference to the DOM element where map will render
 
   useEffect(() => {
-    // Check if the map is properly loaded
-    setMapReady(true);
+    if (mapElement.current) {
+      // Create the map instance
+      new Map({
+        target: mapElement.current, // The DOM element to render the map in
+        layers: [
+          new TileLayer({
+            source: new OSM(), // OpenStreetMap tile source
+          }),
+        ],
+        view: new View({
+          center: fromLonLat([125.1795, 6.1157]), // Coordinates in [longitude, latitude]
+          zoom: 13,
+        }),
+      });
+    }
   }, []);
 
-  if (!mapReady) {
-    return <div>Loading Map...</div>;
-  }
-
   return (
-    <div style={{ height: '500px', width: '100%' }}>
-      <MapWithNoSSR center={position} zoom={zoomLevel} style={{ height: '100%', width: '100%' }}>
-        <TileLayer
-          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-        />
-        <Marker position={position}>
-          <Popup>STI College, General Santos City</Popup>
-        </Marker>
-      </MapWithNoSSR>
+    <div ref={mapElement} style={{ height: '500px', width: '100%' }}>
+      {/* Map will be rendered here */}
     </div>
   );
 };
