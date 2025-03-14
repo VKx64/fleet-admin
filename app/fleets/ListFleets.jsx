@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Icon } from "@iconify/react";
 import useFetchFleets from "@/hooks/useFetchFleets";
+import useDeleteFleet from "@/hooks/useDeleteFleet";
 import ModalCreateFleet from "@/components/ModalCreateFleet";
 import ModalFleetData from "@/components/ModalFleetData";
 
@@ -83,6 +84,13 @@ const ListFleets = ({ driver }) => {
 const Fleet = ({ fleet, onViewFleet }) => {
   const { plate, id, image } = fleet;
   const imageUrl = `${process.env.NEXT_PUBLIC_POCKETBASE_URL}/api/files/fleets/${id}/${image}`;
+  const { deleteFleet, loading: deleting, error: deleteError } = useDeleteFleet();
+
+  const handleDelete = async () => {
+    await deleteFleet(id);
+    // Optionally, you can refresh the fleets list after deletion
+    window.location.reload();
+  };
 
   return (
     <div className="flex h-fit w-48 flex-col gap-2 overflow-clip rounded-xl bg-red-500 p-2">
@@ -95,6 +103,10 @@ const Fleet = ({ fleet, onViewFleet }) => {
       <button className="btn btn-soft" onClick={() => onViewFleet(fleet)}>
         View Fleet
       </button>
+      <button className="btn btn-danger" onClick={handleDelete} disabled={deleting}>
+        {deleting ? "Deleting..." : "Delete"}
+      </button>
+      {deleteError && <p className="text-red-500">{deleteError}</p>}
     </div>
   );
 };
