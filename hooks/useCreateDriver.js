@@ -23,6 +23,7 @@ const useCreateDriver = (adminId) => {
       formDataToSubmit.append('email', formData.email);
       formDataToSubmit.append('phone', formData.phone);
       formDataToSubmit.append('password', formData.password);
+      formDataToSubmit.append('passwordConfirm', formData.password); // Add passwordConfirm field
       formDataToSubmit.append('admin', adminId);
       if (formData.avatar) {
         formDataToSubmit.append('avatar', formData.avatar);

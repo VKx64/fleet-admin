@@ -2,6 +2,7 @@
 import React, { useState } from "react";
 import { Icon } from "@iconify/react";
 import useDrivers from "@/hooks/useFetchDrivers";
+import useDeleteDriver from "@/hooks/useDeleteDriver";
 import ModalCreateDriver from "@/components/ModalCreateDriver";
 
 const ListDrivers = ({ onSelectDriver }) => {
@@ -69,6 +70,16 @@ const ListDrivers = ({ onSelectDriver }) => {
 const Driver = ({ driver, onClick }) => {
   const { id, name, avatar, phone, email } = driver;
   const avatarUrl = `${process.env.NEXT_PUBLIC_POCKETBASE_URL}/api/files/drivers/${id}/${avatar}`;
+  const { deleteDriver, loading: deleting, error: deleteError } = useDeleteDriver();
+
+  // Log the driver object
+  console.log(driver);
+
+  const handleDelete = async () => {
+    await deleteDriver(id);
+    // Optionally, you can refresh the drivers list after deletion
+    window.location.reload();
+  };
 
   return (
     <div
@@ -87,6 +98,10 @@ const Driver = ({ driver, onClick }) => {
         <p className="text-xs text-gray-600">{email}</p>
         <p className="text-xs text-gray-600">+63 {phone}</p>
       </div>
+      <button className="btn btn-danger" onClick={handleDelete} disabled={deleting}>
+        {deleting ? "Deleting..." : "Delete"}
+      </button>
+      {deleteError && <p className="text-red-500">{deleteError}</p>}
     </div>
   );
 };
